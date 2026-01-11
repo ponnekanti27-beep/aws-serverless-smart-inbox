@@ -10,16 +10,15 @@ This study presents a production grade serverless architecture for real-time sen
 **Problem Statement:**
 Customer support teams receive ~80% neutral/positive messages but must prioritize 20% negative feedback immediately [Zendesk 2025]. Manual triage creates 24-48 hour delays, resulting in 15% customer churn from unresolved complaints.
 
-[S3 Event] → [Lambda (50ms)] → [Comprehend (200ms)] → [SQS Routing (10ms)]
-                                    ↓
-                           [End-to-End: 260ms @ 99th percentile]
-
 ## System Architecture
 ```
 [S3 Upload] → [Lambda Function] → [AWS Comprehend] → [SQS Queues]
                                                       ├─ High Priority (Negative)
                                                       └─ Normal Priority (Positive/Neutral)
 
+[S3 Event] → [Lambda (50ms)] → [Comprehend (200ms)] → [SQS Routing (10ms)]
+↓
+[End-to-End: 260ms @ 99th percentile]
 ```
 # Technical Specifications
 
