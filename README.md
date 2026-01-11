@@ -111,23 +111,21 @@ aws s3 cp angry.txt s3://your-bucket/incoming/
                                   ▼
                     ┌───────────────────────────┐
                     │     Amazon Comprehend     │
-                    │ Sentiment Analysis (NLP)  │
+                    │  Sentiment Analysis (NLP) │
                     └─────────────┬─────────────┘
-                                  │ SentimentScore (s.s)
+                                  │ SentimentScore
                                   ▼
-                    ┌───────────────────────────┐
-                    │        Routing Logic      │
-                    │   s.s ≥ 0.7  →  NEGATIVE  │
-                    │   s.s < 0.7  →  NORMAL    │
-                    └─────────────┬─────────────┘
-                                  │ 
-                                  ▼
-                    ┌───────────────────────────┐
-                    │                           │
-   ┌───────────────────────────┐   ┌───────────────────────────┐ 
-   │  SQS High Priority Queue  │   │      SQS Normal Queue     │
-   │   (Negative Messages)     │   │    (Positive / Neutral)   │
-   └─────────────-─────────────┘   └─────────────-─────────────┘
+                 ┌────────────────┴───────────────────┐
+                 │           Routing Logic            │
+                 │   SentimentScore ≥ 0.7 → NEGATIVE  │
+                 │   SentimentScore < 0.7 → NORMAL    │
+                 └─────────────┬─────────────┬────────┘
+                               │             │
+                               ▼             ▼                           
+      ┌───────────────────────────┐   ┌───────────────────────────┐ 
+      │  SQS High Priority Queue  │   │      SQS Normal Queue     │
+      │   (Negative Messages)     │   │    (Positive / Neutral)   │
+      └─────────────-─────────────┘   └─────────────-─────────────┘
 
 
 **Production Features:**
