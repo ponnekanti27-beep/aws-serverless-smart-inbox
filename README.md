@@ -89,8 +89,8 @@ python3 monitor_queues.py
 echo 'Terrible service!' > angry.txt
 aws s3 cp angry.txt s3://your-bucket/incoming/
 
-**Architecture Diagram:**
-text
+
+## Architecture Diagram
 ┌─────────────────┐    ┌──────────────┐    ┌─────────────────┐
 │   S3 Bucket     │───▶│   Lambda     │───▶│  Amazon         │
 │  incoming/      │ PUT │ Sentiment    │ NLP│   Comprehend    │
@@ -103,6 +103,7 @@ text
                         │-  High        │    │≥0.7 NEGATIVE │
                         │-  Normal      │    └──────────────┘
                         └──────────────┘      Latency: 10ms
+
 
 **Production Features:**
 text
