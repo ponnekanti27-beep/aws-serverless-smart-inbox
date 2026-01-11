@@ -91,7 +91,6 @@ aws s3 cp angry.txt s3://your-bucket/incoming/
 
 
 ## Architecture Diagram
-> ASCII-based architecture diagram for GitHub compatibility
                     ┌───────────────────────────┐
                     │        Incoming Text      │
                     │   (Email / Message File)  │
