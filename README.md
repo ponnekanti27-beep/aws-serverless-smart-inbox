@@ -120,9 +120,10 @@ aws s3 cp angry.txt s3://your-bucket/incoming/
                     │   s.s ≥ 0.7  →  NEGATIVE  │
                     │   s.s < 0.7  →  NORMAL    │
                     └─────────────┬─────────────┘
-                            |             |
-                            │             │ 
-                            ▼             ▼
+                                  │ 
+                                  ▼
+                    ┌───────────────────────────┐
+                    │                           │
    ┌───────────────────────────┐   ┌───────────────────────────┐ 
    │  SQS High Priority Queue  │   │      SQS Normal Queue     │
    │   (Negative Messages)     │   │    (Positive / Neutral)   │
