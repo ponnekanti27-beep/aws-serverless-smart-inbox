@@ -91,7 +91,7 @@ aws s3 cp angry.txt s3://your-bucket/incoming/
 
 
 ## Architecture Diagram
-
+> ASCII-based architecture diagram for GitHub compatibility
                     ┌───────────────────────────┐
                     │        Incoming Text      │
                     │   (Email / Message File)  │
@@ -99,33 +99,33 @@ aws s3 cp angry.txt s3://your-bucket/incoming/
                                   │ PUT
                                   ▼
 ┌─────────────────────────────────────────────────────────┐
-│                     Amazon S3                            │
-│                incoming/messages/                        │
+│                     Amazon S3                           │
+│                incoming/messages/                       │
 └───────────────────────────┬─────────────────────────────┘
                             │ S3 Event Trigger
                             ▼
 ┌─────────────────────────────────────────────────────────┐
-│                     AWS Lambda                           │
-│               Sentiment Analyzer                         │
+│                     AWS Lambda                          │
+│               Sentiment Analyzer                        │
 └───────────────────────────┬─────────────────────────────┘
                             │ NLP Request
                             ▼
 ┌─────────────────────────────────────────────────────────┐
-│                  Amazon Comprehend                       │
-│              Sentiment Analysis (NLP)                    │
+│                  Amazon Comprehend                      │
+│              Sentiment Analysis (NLP)                   │
 └───────────────────────────┬─────────────────────────────┘
                             │ sentimentScore
                             ▼
 ┌─────────────────────────────────────────────────────────┐
-│                   Routing Logic                          │
-│   sentimentScore ≥ 0.7  →  NEGATIVE                      │
-│   sentimentScore < 0.7  →  NORMAL                        │
+│                   Routing Logic                         │
+│   sentimentScore ≥ 0.7  →  NEGATIVE                     │
+│   sentimentScore < 0.7  →  NORMAL                       │
 └───────────────────────┬───────────────────────┬─────────┘
                         │                       │
                         ▼                       ▼
 ┌──────────────────────────────┐   ┌──────────────────────────────┐
-│     SQS High Priority Queue   │   │        SQS Normal Queue       │
-│     (Negative Messages)       │   │   (Positive / Neutral)        │
+│     SQS High Priority Queue  │   │        SQS Normal Queue      │
+│     (Negative Messages)      │   │   (Positive / Neutral)       │
 └──────────────────────────────┘   └──────────────────────────────┘
 
 **Production Features:**
