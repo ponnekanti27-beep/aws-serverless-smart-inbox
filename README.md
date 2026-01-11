@@ -21,14 +21,15 @@ Customer support teams receive ~80% neutral/positive messages but must prioritiz
                                                       ├─ High Priority (Negative)
                                                       └─ Normal Priority (Positive/Neutral)
 
-📥 S3(incoming/) ──(ObjectCreated)──> ⚡ Lambda ──(DetectSentiment)──> 🧠 Comprehend
-                                                           ↓
-                                    SentimentScore ≥ 0.7? ─── YES ──> 📬 SQS(HighPriority)
-                                                           ↓ NO
-                                                           📬 SQS(NormalPriority)
-
 ```
+# Technical Specifications
 
+| Component | Service    | Configuration                           | Latency |
+| --------- | ---------- | --------------------------------------- | ------- |
+| Storage   | S3         | Standard class, Event Notifications     | 50ms    |
+| Compute   | Lambda     | Python 3.9, 512MB, 15min timeout        | 50ms    |
+| NLP       | Comprehend | detect_sentiment() API                  | 200ms   |
+| Queuing   | SQS        | Standard queues, 10s visibility timeout | 10ms    |
 ## Features
 
 - 📧 Automatic message ingestion via S3
