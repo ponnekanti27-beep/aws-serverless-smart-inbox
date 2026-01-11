@@ -168,8 +168,3 @@ aws-smart-inbox-sentiment/
 ├── .env
 └── README.md
 ```
-
-## Author
-
-Built following Zero To Cloud's AWS ML project guide.
-EOF
