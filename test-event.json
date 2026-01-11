@@ -1,0 +1,14 @@
+{
+  "Records": [
+    {
+      "s3": {
+        "bucket": {
+          "name": "smart-inbox-messages-1768095982"
+        },
+        "object": {
+          "key": "incoming/test-negative.txt"
+        }
+      }
+    }
+  ]
+}
