@@ -91,22 +91,39 @@ aws s3 cp angry.txt s3://your-bucket/incoming/
 
 
 ## Architecture Diagram
-┌─────────────────┐    ┌──────────────┐    ┌─────────────────┐
-│   S3 Bucket     │───▶│   Lambda     │───▶│  Amazon         │
-│  incoming/      │ PUT │ Sentiment    │ NLP│   Comprehend    │
-└─────────────────┘    │ Analyzer     │    └─────────────────┘
-                        └──────────────┘          ↓
-                       Latency: 50ms     Latency: 200ms
-                                                 ↓
-                        ┌──────────────┐    ┌──────────────┐
-                        │ SQS Queues   │◄───│Routing Logic │
-                        │-  High        │    │≥0.7 NEGATIVE │
-                        │-  Normal      │    └──────────────┘
-                        └──────────────┘      Latency: 10ms
+                         ┌───────────────────────────┐
+                         │        Incoming Text      │
+                         │   (Email / Message File)  │
+                         └─────────────┬─────────────┘
+                                       │ PUT
+                                       ▼
+┌───────────────────────────┐   ┌───────────────────────────┐
+│        Amazon S3           │──▶│     AWS Lambda             │
+│   incoming/ messages       │   │  Sentiment Analyzer        │
+└───────────────────────────┘   └─────────────┬─────────────┘
+                                               │
+                                               ▼
+                                     ┌───────────────────────────┐
+                                     │   Amazon Comprehend        │
+                                     │   NLP Sentiment Analysis   │
+                                     └─────────────┬─────────────┘
+                                               │
+                              ┌────────────────┴────────────────┐
+                              │        Routing Logic              │
+                              │  sentimentScore ≥ 0.7 → NEGATIVE  │
+                              │  else → NORMAL                    │
+                              └─────────────┬─────────────┬──────┘
+                                            │             │
+                                            ▼             ▼
+                         ┌────────────────────────┐  ┌────────────────────────┐
+                         │   SQS High Priority     │  │     SQS Normal Queue    │
+                         │   (Negative Messages)   │  │  (Positive / Neutral)  │
+                         └────────────────────────┘  └────────────────────────┘
+
 
 
 **Production Features:**
-text
+
 Zero provisioning serverless architecture
 Auto scaling to 1M+ messages/day  
 Sub second end-to-end latency (260ms P99)
