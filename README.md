@@ -98,8 +98,8 @@ aws s3 cp angry.txt s3://your-bucket/incoming/
                                   │ PUT
                                   ▼
                     ┌───────────────────────────┐
-                    │        Incoming Text      │
-                    │   (Email / Message File)  │
+                    │        Amazon S3          │
+                    │    incoming/messages/     │
                     └─────────────┬─────────────┘
                                   │ PUT
                                   ▼
