@@ -1,4 +1,3 @@
-cat > README.md <<'EOF'
 # AWS Smart Inbox Sentiment Analyzer
 # AWS Serverless Smart Inbox: Intelligent Sentiment Analysis & Priority Routing Pipeline
 
