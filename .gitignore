@@ -1,0 +1,38 @@
+# Environment
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# AWS
+*.pem
+*.zip
+function.zip
+
+# Dependencies
+lambda/sentiment-analyzer/boto3/
+lambda/sentiment-analyzer/botocore/
+lambda/sentiment-analyzer/bin/
+lambda/sentiment-analyzer/dateutil/
+lambda/sentiment-analyzer/jmespath/
+lambda/sentiment-analyzer/s3transfer/
+lambda/sentiment-analyzer/urllib3/
+lambda/sentiment-analyzer/*.dist-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
