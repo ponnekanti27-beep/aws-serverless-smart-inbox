@@ -91,36 +91,42 @@ aws s3 cp angry.txt s3://your-bucket/incoming/
 
 
 ## Architecture Diagram
-                         ┌───────────────────────────┐
-                         │        Incoming Text      │
-                         │   (Email / Message File)  │
-                         └─────────────┬─────────────┘
-                                       │ PUT
-                                       ▼
-┌───────────────────────────┐   ┌───────────────────────────┐
-│        Amazon S3           │──▶│     AWS Lambda             │
-│   incoming/ messages       │   │  Sentiment Analyzer        │
-└───────────────────────────┘   └─────────────┬─────────────┘
-                                               │
-                                               ▼
-                                     ┌───────────────────────────┐
-                                     │   Amazon Comprehend        │
-                                     │   NLP Sentiment Analysis   │
-                                     └─────────────┬─────────────┘
-                                               │
-                              ┌────────────────┴────────────────┐
-                              │        Routing Logic              │
-                              │  sentimentScore ≥ 0.7 → NEGATIVE  │
-                              │  else → NORMAL                    │
-                              └─────────────┬─────────────┬──────┘
-                                            │             │
-                                            ▼             ▼
-                         ┌────────────────────────┐  ┌────────────────────────┐
-                         │   SQS High Priority     │  │     SQS Normal Queue    │
-                         │   (Negative Messages)   │  │  (Positive / Neutral)  │
-                         └────────────────────────┘  └────────────────────────┘
 
-
+                    ┌───────────────────────────┐
+                    │        Incoming Text      │
+                    │   (Email / Message File)  │
+                    └─────────────┬─────────────┘
+                                  │ PUT
+                                  ▼
+┌─────────────────────────────────────────────────────────┐
+│                     Amazon S3                            │
+│                incoming/messages/                        │
+└───────────────────────────┬─────────────────────────────┘
+                            │ S3 Event Trigger
+                            ▼
+┌─────────────────────────────────────────────────────────┐
+│                     AWS Lambda                           │
+│               Sentiment Analyzer                         │
+└───────────────────────────┬─────────────────────────────┘
+                            │ NLP Request
+                            ▼
+┌─────────────────────────────────────────────────────────┐
+│                  Amazon Comprehend                       │
+│              Sentiment Analysis (NLP)                    │
+└───────────────────────────┬─────────────────────────────┘
+                            │ sentimentScore
+                            ▼
+┌─────────────────────────────────────────────────────────┐
+│                   Routing Logic                          │
+│   sentimentScore ≥ 0.7  →  NEGATIVE                      │
+│   sentimentScore < 0.7  →  NORMAL                        │
+└───────────────────────┬───────────────────────┬─────────┘
+                        │                       │
+                        ▼                       ▼
+┌──────────────────────────────┐   ┌──────────────────────────────┐
+│     SQS High Priority Queue   │   │        SQS Normal Queue       │
+│     (Negative Messages)       │   │   (Positive / Neutral)        │
+└──────────────────────────────┘   └──────────────────────────────┘
 
 **Production Features:**
 
