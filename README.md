@@ -1,10 +1,18 @@
 # AWS Smart Inbox Sentiment Analyzer
 # AWS Serverless Smart Inbox: Intelligent Sentiment Analysis & Priority Routing Pipeline
+---
 
+[![Python](https://img.shields.io/badge/Python-3.9-blue?style=for-the-badge&logo=python)](https://python.org)
+[![Serverless](https://img.shields.io/badge/AWS-Serverless-orange?style=for-the-badge&logo=amazon-aws)](https://aws.amazon.com/serverless/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge&logo=mit)](LICENSE)
+[![Comprehend](https://img.shields.io/badge/Amazon_Comprehend-NLP-green?style=for-the-badge&logo=amazon-aws)](https://aws.amazon.com/comprehend/)
+
+---
 
 This study presents a production grade serverless architecture for real-time sentiment analysis of unstructured text streams utilizing Amazon Comprehend. The system achieves sub second latency in sentiment classification and enables intelligent priority routing through SQS dead letter queues. S3 object uploads are processed via event driven Lambda triggers, facilitating enterprise scale message triage without the need for infrastructure provisioning.
 
 **Key Innovation** : Dynamic routing based on negative sentiment confidence thresholds (≥0.7 → High Priority), enabling customer support prioritization at $0.0001 per inference.
+
 
 # 1. Introduction
 **Problem Statement:**
@@ -16,9 +24,7 @@ Customer support teams receive ~80% neutral/positive messages but must prioritiz
                                                       ├─ High Priority (Negative)
                                                       └─ Normal Priority (Positive/Neutral)
 
-[S3 Event] → [Lambda (50ms)] → [Comprehend (200ms)] → [SQS Routing (10ms)]
-↓
-[End-to-End: 260ms @ 99th percentile]
+
 ```
 # Technical Specifications
 
